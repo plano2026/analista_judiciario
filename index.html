@@ -3,34 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cronograma PJSC 2026</title>
+    <title>Cronograma PJSC 2026 - Inteligente</title>
     <style>
         :root {
             --primary: #2c3e50;
-            --secondary: #34495e;
             --accent: #3498db;
-            --success: #27ae60;
+            --success: #2ecc71;
             --bg: #f4f7f6;
             --text: #333;
-            --white: #ffffff;
-            --border: #ddd;
+            --white: #fff;
+            --border: #dcdde1;
+            --hw-color: #e74c3c; /* Cor para disciplinas de alto peso */
+            --sw-color: #f39c12; /* Cor para disciplinas padrão */
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-top: 80px; /* Espaço para a barra fixa */
-            line-height: 1.6;
+            padding-top: 90px;
+            padding-bottom: 40px;
         }
 
-        /* BARRA DE PROGRESSO FIXA */
+        /* BARRA FIXA */
         header {
             position: fixed;
             top: 0;
@@ -38,26 +39,28 @@
             width: 100%;
             background: var(--primary);
             color: var(--white);
-            padding: 10px 20px;
+            padding: 15px 20px;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         .progress-container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
-        .progress-info {
+        .progress-labels {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            font-size: 0.85rem;
             margin-bottom: 8px;
-            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .progress-bar-bg {
-            background: rgba(255,255,255,0.2);
+        .progress-bg {
+            background: rgba(255,255,255,0.1);
             height: 12px;
             border-radius: 6px;
             overflow: hidden;
@@ -67,30 +70,29 @@
             height: 100%;
             background: var(--success);
             width: 0%;
-            transition: width 0.4s ease;
+            transition: width 0.5s ease;
         }
 
-        /* CONTEÚDO PRINCIPAL */
+        /* CONTEÚDO */
         main {
-            max-width: 1200px;
-            margin: 20px auto;
+            max-width: 1100px;
+            margin: 0 auto;
             padding: 0 15px;
         }
 
-        .intro {
+        .title-box {
             text-align: center;
             margin-bottom: 30px;
         }
 
-        .intro h1 {
+        .title-box h1 {
             color: var(--primary);
-            font-size: 1.8rem;
+            font-size: 1.6rem;
         }
 
-        /* GRID DE DIAS */
-        .schedule-grid {
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
         }
 
@@ -98,7 +100,6 @@
             background: var(--white);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             border: 1px solid var(--border);
             display: flex;
             flex-direction: column;
@@ -106,96 +107,91 @@
         }
 
         .day-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
         }
 
-        .day-header {
+        .card-header {
             border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
             margin-bottom: 15px;
-            padding-bottom: 8px;
         }
 
-        .day-date {
-            font-weight: bold;
+        .date-txt {
             font-size: 1.1rem;
+            font-weight: 800;
             color: var(--primary);
         }
 
-        .day-name {
-            font-size: 0.85rem;
+        .weekday-txt {
+            font-size: 0.75rem;
             text-transform: uppercase;
-            color: #7f8c8d;
-            letter-spacing: 1px;
+            color: var(--accent);
+            font-weight: 700;
         }
 
-        /* TÓPICOS */
-        .topics-list {
-            list-style: none;
-            flex-grow: 1;
-        }
-
-        .topic-item {
+        /* DISCIPLINAS */
+        .subject-item {
             display: flex;
-            align-items: flex-start;
-            margin-bottom: 12px;
-            padding: 8px;
-            border-radius: 6px;
-            background: #f9f9f9;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border-left: 5px solid transparent;
+            transition: 0.2s;
         }
 
-        .topic-item:last-child {
-            margin-bottom: 0;
+        .subject-item:hover {
+            background: #eef1f4;
         }
 
-        .topic-item.completed {
-            background: #e8f6ef;
+        .subject-item.hw { border-left-color: var(--hw-color); }
+        .subject-item.sw { border-left-color: var(--sw-color); }
+
+        .subject-item.completed {
+            background: #e8f8f0;
             opacity: 0.8;
         }
 
-        .checkbox-container {
+        .check-box {
             margin-right: 12px;
-            padding-top: 4px;
         }
 
-        .checkbox-container input {
-            width: 20px;
-            height: 20px;
+        .check-box input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--success);
             cursor: pointer;
         }
 
-        .topic-content {
-            font-size: 0.95rem;
+        .subject-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
         }
 
-        .subject-tag {
-            font-weight: bold;
-            font-size: 0.75rem;
-            display: block;
-            margin-bottom: 2px;
-            color: var(--accent);
-            text-transform: uppercase;
-        }
-
-        .topic-text {
-            color: #444;
-        }
-
-        .completed .topic-text {
+        .completed .subject-name {
             text-decoration: line-through;
             color: #7f8c8d;
         }
 
-        /* RESPONSIVIDADE */
+        .weight-tag {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: auto;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .hw .weight-tag { background: #fee; color: var(--hw-color); }
+        .sw .weight-tag { background: #fff4e5; color: var(--sw-color); }
+
         @media (max-width: 600px) {
-            body {
-                padding-top: 90px;
-            }
-            .schedule-grid {
-                grid-template-columns: 1fr;
-            }
-            .intro h1 {
-                font-size: 1.4rem;
-            }
+            body { padding-top: 110px; }
+            .grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -203,468 +199,167 @@
 
     <header>
         <div class="progress-container">
-            <div class="progress-info">
-                <span>Progresso Total</span>
-                <span id="progress-percent">0%</span>
+            <div class="progress-labels">
+                <span>Progresso das Disciplinas</span>
+                <span id="perc-val">0%</span>
             </div>
-            <div class="progress-bar-bg">
+            <div class="progress-bg">
                 <div id="progress-fill"></div>
             </div>
-            <div style="text-align: center; font-size: 0.7rem; margin-top: 4px; opacity: 0.8;">
-                <span id="progress-count">0 / 0</span> Tópicos Concluídos
+            <div style="text-align: center; font-size: 0.7rem; margin-top: 5px; opacity: 0.8;">
+                <span id="done-val">0</span> de <span id="total-val">0</span> sessões concluídas
             </div>
         </div>
     </header>
 
     <main>
-        <div class="intro">
-            <h1>Cronograma de Estudos - PJSC 2026</h1>
-            <p>De 02/04/2026 até 27/06/2026</p>
+        <div class="title-box">
+            <h1>Plano PJSC 2026</h1>
+            <p>Foco Estratégico: Distribuição por Pesos</p>
         </div>
 
-        <div id="schedule-grid" class="schedule-grid">
-            <!-- Gerado via JavaScript -->
-        </div>
+        <div id="main-grid" class="grid"></div>
     </main>
 
     <script>
-        // --- BANCO DE DADOS DE TÓPICOS (EXATAMENTE COMO ENVIADO) ---
-        const subjectsData = [
-            {
-                name: "Língua Portuguesa",
-                topics: [
-                    "Compreensão e interpretação de textos de gêneros variados.",
-                    "Reconhecimento de tipos e gêneros textuais.",
-                    "Domínio da ortografia oficial: Emprego das letras.",
-                    "Domínio da ortografia oficial: Emprego da acentuação gráfica.",
-                    "Domínio dos mecanismos de coesão textual: Emprego de elementos de referenciação, substituição e repetição.",
-                    "Domínio dos mecanismos de coesão textual: Emprego de conectores e outros elementos de sequenciação textual.",
-                    "Domínio dos mecanismos de coesão textual: Emprego/correlação de tempos e modos verbais.",
-                    "Domínio da estrutura morfossintática do período: Relações de coordenação entre orações e entre termos da oração.",
-                    "Domínio da estrutura morfossintática do período: Relações de subordinação entre orações e entre termos da oração.",
-                    "Domínio da estrutura morfossintática do período: Emprego dos sinais de pontuação.",
-                    "Domínio da estrutura morfossintática do período: Concordância verbal e nominal.",
-                    "Domínio da estrutura morfossintática do período: Emprego do sinal indicativo de crase.",
-                    "Domínio da estrutura morfossintática do período: Colocação dos pronomes átonos.",
-                    "Reescritura de frases e parágrafos do texto: Substituição de palavras ou de trechos de texto.",
-                    "Reescritura de frases e parágrafos do texto: Retextualização de diferentes gêneros e níveis de formalidade."
-                ]
-            },
-            {
-                name: "Legislação Institucional do PJSC",
-                topics: [
-                    "Estrutura, competências e funcionamento do Poder Judiciário estadual.",
-                    "Organização judiciária: Divisão, composição, competências e funcionamento dos órgãos jurisdicionais e administrativos.",
-                    "Regimento Interno do Tribunal de Justiça: Organização, competências e funcionamento dos órgãos do TJSC.",
-                    "Normas da Corregedoria-Geral da Justiça.",
-                    "Regime jurídico e disciplinar dos servidores.",
-                    "Lei nº 5.624/1979: Código de Divisão e Organização Judiciárias do Estado de Santa Catarina.",
-                    "Regimento Interno do Tribunal de Justiça de Santa Catarina (Legislação Específica).",
-                    "Código de Normas da Corregedoria-Geral da Justiça do PJSC.",
-                    "Lei nº 6.745/1985: Estatuto dos Servidores Públicos Civis do Estado de Santa Catarina.",
-                    "Lei Complementar nº 639/2015: Regime disciplinar aplicável aos servidores."
-                ]
-            },
-            {
-                name: "Ética e Gestão no Serviço Público",
-                topics: [
-                    "Princípios e ética na Administração Pública: Princípios constitucionais.",
-                    "Moralidade administrativa e interesse público.",
-                    "Probidade e integridade.",
-                    "Conflito de interesses.",
-                    "Responsabilidade e regime funcional do servidor: Deveres e vedações.",
-                    "Responsabilização administrativa, civil e penal.",
-                    "Processo disciplinar e sanções.",
-                    "Improbidade administrativa: Atos de improbidade.",
-                    "Improbidade administrativa: Aplicação em casos concretos.",
-                    "Responsabilização de pessoas jurídicas: Responsabilidade objetiva.",
-                    "Atos lesivos contra a Administração Pública.",
-                    "Acordo de leniência e programas de integridade.",
-                    "Gestão de pessoas e comportamento organizacional: Motivação, liderança e desempenho.",
-                    "Trabalho em equipe e comunicação.",
-                    "Cultura organizacional.",
-                    "Integridade institucional no Poder Judiciário: Padrões éticos, transparência e controle.",
-                    "Prevenção de irregularidades e Código de Ética e Conduta do PJSC.",
-                    "Lei nº 8.429/1992: Lei de Improbidade Administrativa.",
-                    "Lei nº 12.846/2013: Lei Anticorrupção.",
-                    "Resolução TJ nº 22/2021: Código de Ética e Conduta do PJSC."
-                ]
-            },
-            {
-                name: "Noções de Informática e Proteção de Dados",
-                topics: [
-                    "Fundamentos de informática: Conceitos básicos de hardware e software.",
-                    "Sistemas operacionais e aplicativos.",
-                    "Redes de computadores e internet.",
-                    "Segurança da informação: princípios, ameaças e boas práticas.",
-                    "Proteção de dados pessoais: Conceitos fundamentais e princípios.",
-                    "Direitos do titular e bases legais de tratamento.",
-                    "Agentes de tratamento e responsabilidades.",
-                    "Segurança e boas práticas no tratamento de dados.",
-                    "Políticas institucionais de privacidade e proteção de dados no PJSC.",
-                    "Tratamento de dados pessoais em atividades judiciais e administrativas.",
-                    "Lei nº 13.709/2018: Lei Geral de Proteção de Dados Pessoais (LGPD).",
-                    "Resolução TJ nº 3/2021: Política Geral de Privacidade e Proteção de Dados do PJSC."
-                ]
-            },
-            {
-                name: "Direitos Humanos e acesso à Justiça",
-                topics: [
-                    "Princípios e fundamentos dos direitos humanos: Dignidade da pessoa humana.",
-                    "Universalidade e indivisibilidade.",
-                    "Proteção internacional e constitucional dos direitos fundamentais.",
-                    "Acesso à justiça e garantias processuais: Devido processo legal.",
-                    "Contraditório e ampla defesa.",
-                    "Efetividade da prestação jurisdicional.",
-                    "Igualdade, não discriminação e grupos vulneráveis.",
-                    "Proteção de pessoas em situação de vulnerabilidade.",
-                    "Atuação do Poder Judiciário na promoção de direitos e acesso à justiça."
-                ]
-            },
-            {
-                name: "Direito Constitucional",
-                topics: [
-                    "Aplicabilidade das normas constitucionais: Eficácia plena, contida e limitada.",
-                    "Normas programáticas.",
-                    "Princípios fundamentais.",
-                    "Direitos individuais e coletivos.",
-                    "Direitos sociais.",
-                    "Nacionalidade e direitos políticos.",
-                    "Organização do Estado: Federação e entes federativos.",
-                    "Poder Legislativo: Processo legislativo e fiscalização.",
-                    "Poder Executivo: Atribuições e responsabilidades.",
-                    "Poder Judiciário: Organização, competências e CNJ.",
-                    "Garantias da magistratura e funcionamento da justiça.",
-                    "Funções essenciais à justiça: Ministério Público.",
-                    "Advocacia Pública e Defensoria Pública."
-                ]
-            },
-            {
-                name: "Direito Administrativo",
-                topics: [
-                    "Administração Pública: Conceito, organização e princípios.",
-                    "Administração Direta e Indireta, entidades paraestatais e terceiro setor.",
-                    "Regime jurídico-administrativo e papel do Estado.",
-                    "Ato administrativo: requisitos, atributos e invalidação.",
-                    "Poderes administrativos: poder de polícia e poder regulamentar.",
-                    "Discricionariedade: limites, controle e legitimidade.",
-                    "Agentes públicos: Regime jurídico, espécies, cargos e funções.",
-                    "Agentes públicos: Direitos, deveres e responsabilidade.",
-                    "Agentes públicos: Processo disciplinar.",
-                    "Licitação e princípios.",
-                    "Contratos administrativos.",
-                    "Concessões, permissões e parcerias.",
-                    "Serviços públicos: Conceito, regime e formas de prestação.",
-                    "Regulação, agências e domínio econômico.",
-                    "Intervenção na propriedade: limitações, desapropriação e função social.",
-                    "Controle interno, externo e judicial.",
-                    "Atuação dos Tribunais de Contas e do Ministério Público.",
-                    "Controle social e transparência.",
-                    "Processo administrativo e direito à informação.",
-                    "Meios de controle judicial: mandado de segurança, ação civil pública e ação popular.",
-                    "Responsabilidade civil do Estado.",
-                    "Improbidade administrativa e defesa do patrimônio público.",
-                    "Bens públicos e políticas urbanas.",
-                    "Lei nº 9.784/1999: Regula o processo administrativo.",
-                    "Lei nº 14.133/2021: Nova Lei de Licitações e Contratos."
-                ]
-            },
-            {
-                name: "Direito Civil e Consumidor",
-                topics: [
-                    "LINDB: Vigência, aplicação e interpretação das normas.",
-                    "Pessoas naturais: personalidade, capacidade e domicílio.",
-                    "Pessoas jurídicas: constituição e responsabilidade.",
-                    "Bens: classificação e regimes jurídicos.",
-                    "Negócios jurídicos: elementos, validade e defeitos.",
-                    "Atos jurídicos: prescrição e decadência.",
-                    "Obrigações: conceito e fontes.",
-                    "Obrigações: transmissão e extinção.",
-                    "Inadimplemento, mora e perdas e danos.",
-                    "Contratos: Teoria geral e princípios.",
-                    "Contratos em espécie: locação e relações de consumo.",
-                    "Responsabilidade civil: subjetiva e objetiva.",
-                    "Dano moral e material.",
-                    "Posse e propriedade: aquisição e perda.",
-                    "Usucapião e Direitos reais em espécie.",
-                    "Bem de família.",
-                    "Direito de família: casamento e união estável.",
-                    "Regime de bens e Alimentos.",
-                    "Tutela, curatela e tomada de decisão apoiada.",
-                    "Sucessão legítima e testamentária.",
-                    "CDC: Princípios e direitos básicos.",
-                    "CDC: Responsabilidade pelo fato e vício.",
-                    "CDC: Práticas comerciais e publicidade.",
-                    "CDC: Cláusulas abusivas e superendividamento.",
-                    "CDC: Defesa do consumidor em juízo.",
-                    "Temas contemporâneos: Proteção de dados e contratos eletrônicos.",
-                    "Lei nº 8.245/1991 (Locação) e Lei nº 8.009/1990.",
-                    "Lei nº 12.965/2014 (Marco Civil da Internet)."
-                ]
-            },
-            {
-                name: "Direito Processual Civil",
-                topics: [
-                    "Jurisdição, ação e competência.",
-                    "Sujeitos do processo: partes e representação.",
-                    "Litisconsórcio e intervenção de terceiros.",
-                    "Deveres das partes e poderes do juiz.",
-                    "Petição inicial e condições da ação.",
-                    "Resposta do réu e estabilização da demanda.",
-                    "Saneamento e organização do processo.",
-                    "Audiências e meios de autocomposição.",
-                    "Tutela de urgência e de evidência.",
-                    "Provas: Teoria geral e ônus da prova.",
-                    "Provas em espécie e prova tecnológica.",
-                    "Sentença e Coisa Julgada.",
-                    "Remessa necessária e preclusão.",
-                    "Teoria geral da execução.",
-                    "Execução de título judicial e extrajudicial.",
-                    "Execução contra a Fazenda Pública e alimentos.",
-                    "Teoria geral dos recursos e recursos em espécie.",
-                    "Ação rescisória e precedentes obrigatórios.",
-                    "Procedimentos de jurisdição voluntária.",
-                    "Juizados especiais e Arbitragem.",
-                    "Microssistema da tutela coletiva.",
-                    "Lei nº 13.105/2015: Código de Processo Civil.",
-                    "Lei nº 7.347/1985: Lei da Ação Civil Pública.",
-                    "Lei nº 4.717/1965: Lei da Ação Popular."
-                ]
-            },
-            {
-                name: "Direito Penal",
-                topics: [
-                    "Princípios constitucionais penais.",
-                    "Aplicação da lei penal no tempo e espaço.",
-                    "Teoria do crime: fato típico, ilicitude e culpabilidade.",
-                    "Dolo, culpa e erro.",
-                    "Iter criminis: tentativa e desistência.",
-                    "Concurso de pessoas.",
-                    "Penas: espécies e dosimetria.",
-                    "Medidas de segurança.",
-                    "Concurso de crimes.",
-                    "Extinção da punibilidade.",
-                    "Crimes contra a pessoa.",
-                    "Crimes contra o patrimônio.",
-                    "Crimes contra a dignidade sexual.",
-                    "Crimes contra a fé pública.",
-                    "Crimes contra a Administração Pública.",
-                    "Lei nº 7.210/1984: Lei de Execução Penal.",
-                    "Lei nº 11.343/2006: Lei de Drogas.",
-                    "Lei nº 11.340/2006: Lei Maria da Penha.",
-                    "Lei nº 8.069/1990: ECA (Penal).",
-                    "Lei nº 10.741/2003 e Lei nº 13.146/2015.",
-                    "Lei nº 8.072/1990 (Hediondos) e Lei nº 9.455/1997.",
-                    "Lei nº 13.869/2019: Abuso de Autoridade.",
-                    "Lei nº 12.850/2013 (Orcrim) e Lei nº 9.613/1998.",
-                    "Lei nº 10.826/2003: Estatuto do Desarmamento.",
-                    "Lei nº 7.716/1989 e Lei nº 9.605/1998.",
-                    "Lei nº 12.737/2012 e Pacote Anticrime (13.964/19)."
-                ]
-            },
-            {
-                name: "Direito Processual Penal",
-                topics: [
-                    "Sistemas processuais e princípios constitucionais.",
-                    "Inquérito policial e Termo Circunstanciado.",
-                    "Investigação pelo MP e direitos do investigado.",
-                    "ANPP: Acordo de Não Persecução Penal.",
-                    "Ação penal: espécies e condições.",
-                    "Jurisdição e competência penal.",
-                    "Procedimento comum e Tribunal do Júri.",
-                    "Atos processuais: citação e intimação.",
-                    "Revelia e seus efeitos.",
-                    "Teoria geral da prova e admissibilidade.",
-                    "Cadeia de custódia e provas digitais.",
-                    "Prisão processual: espécies e fundamentos.",
-                    "Medidas cautelares diversas da prisão.",
-                    "Audiências de custódia.",
-                    "Nulidades no processo penal.",
-                    "Teoria geral dos recursos e recursos em espécie.",
-                    "Habeas Corpus e Revisão Criminal.",
-                    "Execução Penal: regimes e benefícios.",
-                    "Justiça restaurativa e proteção de grupos vulneráveis.",
-                    "Lei nº 9.099/1995: JECRIM.",
-                    "Lei Mariana Ferrer e Lei Henry Borel."
-                ]
-            },
-            {
-                name: "Direitos Humanos e Tutela Coletiva",
-                topics: [
-                    "DH: Fontes, princípios e dimensões.",
-                    "Obrigações estatais em Direitos Humanos.",
-                    "Sistema Global (ONU) e Interamericano (OEA).",
-                    "Responsabilidade internacional do Estado.",
-                    "Controle de convencionalidade no Brasil.",
-                    "Direito antidiscriminatório e racismo.",
-                    "Estatuto da Criança e do Adolescente e do Idoso.",
-                    "Sistema prisional e direitos humanos.",
-                    "Ação Civil Pública e tutela de direitos difusos.",
-                    "Participação social e mínimo existencial."
-                ]
-            }
+        // CONFIGURAÇÃO DAS DISCIPLINAS
+        const highWeight = [
+            "Língua Portuguesa",
+            "Direito Constitucional",
+            "Direito Administrativo",
+            "Direito Civil e Direito do Consumidor",
+            "Direito Processual Civil"
         ];
 
-        // --- LÓGICA DE DISTRIBUIÇÃO ---
-        const startDate = new Date(2026, 3, 2); // 02/04/2026 (Quinta)
-        const endDate = new Date(2026, 5, 27);  // 27/06/2026 (Sábado)
+        const standardWeight = [
+            "Legislação Institucional do PJSC",
+            "Ética e Gestão no Serviço Público",
+            "Noções de Informática e Proteção de Dados",
+            "Direitos Humanos e acesso à Justiça",
+            "Direito Penal",
+            "Direito Processual Penal",
+            "Direitos Humanos e Tutela Coletiva"
+        ];
 
-        // Criar uma lista plana de "Matéria: Tópico" seguindo a ordem das disciplinas
-        let allTopicsList = [];
-        subjectsData.forEach(subj => {
-            subj.topics.forEach(t => {
-                allTopicsList.push({ subject: subj.name, text: t });
-            });
-        });
-
-        // Para alternar matérias conforme solicitado, vamos manter ponteiros por matéria
-        // Mas a forma mais simples de garantir 1 de cada matéria (semana) ou 2 de cada (fim de semana)
-        // É agrupar os tópicos por matéria.
-        let subjectQueues = subjectsData.map(s => ({ 
-            name: s.name, 
-            topics: [...s.topics] 
-        }));
-
-        function getNextTopic(subjectIndex) {
-            const queue = subjectQueues[subjectIndex % subjectQueues.length];
-            if (queue.topics.length > 0) {
-                return { subject: queue.name, text: queue.topics.shift() };
-            }
-            // Se acabar essa matéria, tenta a próxima
-            for(let i=0; i < subjectQueues.length; i++) {
-                if(subjectQueues[i].topics.length > 0) {
-                    return { subject: subjectQueues[i].name, text: subjectQueues[i].topics.shift() };
-                }
-            }
-            return null;
-        }
-
-        const grid = document.getElementById('schedule-grid');
-        const progressFill = document.getElementById('progress-fill');
-        const progressPercent = document.getElementById('progress-percent');
-        const progressCount = document.getElementById('progress-count');
-
-        let totalTopicsGlobal = 0;
-        let currentSubjectPointer = 0;
+        const startDate = new Date(2026, 3, 2); // 02/04/2026
+        const endDate = new Date(2026, 5, 27);  // 27/06/2026
 
         function generateSchedule() {
+            const grid = document.getElementById('main-grid');
             let currentDate = new Date(startDate);
-            let dayCount = 0;
+            let dayIdx = 0;
+            
+            // Ponteiros para rotação infinita
+            let hwPtr = 0;
+            let swPtr = 0;
 
             while (currentDate <= endDate) {
-                const dayOfWeek = currentDate.getDay(); // 0: Dom, 1: Seg...
-                const dateString = currentDate.toLocaleDateString('pt-BR');
-                const dayName = currentDate.toLocaleDateString('pt-BR', { weekday: 'long' });
+                const dw = currentDate.getDay(); // 0: Dom, 6: Sab
+                const isWeekend = (dw === 0 || dw === 6);
                 
-                // Determinar quantos tópicos hoje
-                // Seg-Sex: 2 tópicos (1 de cada matéria)
-                // Sab-Dom: 4 tópicos (2 de cada matéria)
-                let numSubjectsToday = (dayOfWeek === 0 || dayOfWeek === 6) ? 2 : 2; 
-                let topicsPerSubject = (dayOfWeek === 0 || dayOfWeek === 6) ? 2 : 1;
+                // Regra: 2 (seg-sex) | 4 (sab-dom)
+                const slots = isWeekend ? 4 : 2;
 
-                const dayCard = document.createElement('div');
-                dayCard.className = 'day-card';
+                const card = document.createElement('div');
+                card.className = 'day-card';
                 
-                let dayHtml = `
-                    <div class="day-header">
-                        <div class="day-date">${dateString}</div>
-                        <div class="day-name">${dayName}</div>
+                const dStr = currentDate.toLocaleDateString('pt-BR');
+                const wStr = currentDate.toLocaleDateString('pt-BR', { weekday: 'long' });
+
+                let html = `
+                    <div class="card-header">
+                        <div class="weekday-txt">${wStr}</div>
+                        <div class="date-txt">${dStr}</div>
                     </div>
-                    <ul class="topics-list">
                 `;
 
-                for (let s = 0; s < numSubjectsToday; s++) {
-                    for (let t = 0; t < topicsPerSubject; t++) {
-                        // O ponteiro currentSubjectPointer garante que peguemos matérias diferentes
-                        const topic = getNextTopic(currentSubjectPointer + s);
-                        if (topic) {
-                            const topicId = `topic-${dayCount}-${s}-${t}`;
-                            dayHtml += `
-                                <li class="topic-item" id="li-${topicId}">
-                                    <div class="checkbox-container">
-                                        <input type="checkbox" id="${topicId}" onchange="toggleTopic('${topicId}')">
-                                    </div>
-                                    <div class="topic-content">
-                                        <span class="subject-tag">${topic.subject}</span>
-                                        <span class="topic-text">${topic.text}</span>
-                                    </div>
-                                </li>
-                            `;
-                            totalTopicsGlobal++;
-                        }
+                for (let i = 0; i < slots; i++) {
+                    let isHW = false;
+                    let subject = "";
+
+                    // Distribuição Inteligente:
+                    // Se for 2 slots (Semana): 1 HW e 1 SW.
+                    // Se for 4 slots (Fim de semana): 2 HW e 2 SW.
+                    if (slots === 2) {
+                        if (i === 0) { isHW = true; subject = highWeight[hwPtr % highWeight.length]; hwPtr++; }
+                        else { isHW = false; subject = standardWeight[swPtr % standardWeight.length]; swPtr++; }
+                    } else {
+                        if (i < 2) { isHW = true; subject = highWeight[hwPtr % highWeight.length]; hwPtr++; }
+                        else { isHW = false; subject = standardWeight[swPtr % standardWeight.length]; swPtr++; }
                     }
+
+                    const uid = `s-${dayIdx}-${i}`;
+                    html += `
+                        <div class="subject-item ${isHW ? 'hw' : 'sw'}" id="li-${uid}" onclick="toggle('${uid}')">
+                            <div class="check-box">
+                                <input type="checkbox" id="${uid}" onchange="event.stopPropagation(); toggle('${uid}')">
+                            </div>
+                            <span class="subject-name">${subject}</span>
+                            <span class="weight-tag">${isHW ? 'Peso Alto' : 'Base'}</span>
+                        </div>
+                    `;
                 }
 
-                dayHtml += `</ul>`;
-                dayCard.innerHTML = dayHtml;
-                grid.appendChild(dayCard);
+                card.innerHTML = html;
+                grid.appendChild(card);
 
-                // Avançar matérias para o próximo dia para não ficar sempre nas mesmas
-                currentSubjectPointer += 2; 
-                
                 currentDate.setDate(currentDate.getDate() + 1);
-                dayCount++;
+                dayIdx++;
             }
-            
+
             loadProgress();
-            updateProgressBar();
+            updateStats();
         }
 
-        function toggleTopic(id) {
+        window.toggle = function(id) {
             const cb = document.getElementById(id);
             const li = document.getElementById('li-' + id);
             
-            if (cb.checked) {
-                li.classList.add('completed');
-            } else {
-                li.classList.remove('completed');
+            if (event.target.type !== 'checkbox') {
+                cb.checked = !cb.checked;
             }
+
+            if (cb.checked) li.classList.add('completed');
+            else li.classList.remove('completed');
             
             saveProgress();
-            updateProgressBar();
-        }
+            updateStats();
+        };
 
-        function updateProgressBar() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            const checked = document.querySelectorAll('input[type="checkbox"]:checked');
-            
-            const total = checkboxes.length;
-            const done = checked.length;
-            const percent = total > 0 ? Math.round((done / total) * 100) : 0;
-            
-            progressFill.style.width = percent + '%';
-            progressPercent.innerText = percent + '%';
-            progressCount.innerText = `${done} / ${total}`;
+        function updateStats() {
+            const total = document.querySelectorAll('input[type="checkbox"]').length;
+            const done = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const perc = total === 0 ? 0 : Math.round((done / total) * 100);
+
+            document.getElementById('progress-fill').style.width = perc + '%';
+            document.getElementById('perc-val').innerText = perc + '%';
+            document.getElementById('done-val').innerText = done;
+            document.getElementById('total-val').innerText = total;
         }
 
         function saveProgress() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
             const states = {};
-            checkboxes.forEach(cb => {
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
                 states[cb.id] = cb.checked;
             });
-            localStorage.setItem('pjsc_progress_2026', JSON.stringify(states));
+            localStorage.setItem('pjsc_smart_v2', JSON.stringify(states));
         }
 
         function loadProgress() {
-            const saved = localStorage.getItem('pjsc_progress_2026');
+            const saved = localStorage.getItem('pjsc_smart_v2');
             if (saved) {
                 const states = JSON.parse(saved);
                 for (const id in states) {
                     const cb = document.getElementById(id);
                     if (cb) {
                         cb.checked = states[id];
-                        if (cb.checked) {
-                            document.getElementById('li-' + id).classList.add('completed');
-                        }
+                        if (cb.checked) document.getElementById('li-' + id).classList.add('completed');
                     }
                 }
             }
         }
 
-        // Iniciar
         window.onload = generateSchedule;
-
     </script>
 </body>
 </html>
